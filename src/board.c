@@ -49,15 +49,26 @@ int check_full_board(char **board)
     return 1;
 }
 
+static int check_if_already_set(char **board, char player, int line, int col)
+{
+    if (board[line][col] != ' ')
+    {
+        printf("This case is already use try another one\n");
+        return 0;
+    }
+    board[line][col] = player;
+    return 1;
+}
+
 int put_char_in_board(char **board, char player, char *input)
 {
     if (input[0] == 'A' || input[0] == 'a')
-        board[input[1] - '0'][0] = player;
+        return check_if_already_set(board, player, input[1] - '0', 0);
     else if (input[0] == 'B' || input[0] == 'b')
-        board[input[1] - '0'][1] = player;
+        return check_if_already_set(board, player, input[1] - '0', 1);
     else
-        board[input[1] - '0'][2] = player;
-    return 1;
+        return check_if_already_set(board, player, input[1] - '0', 2);
+    return 0;
 }
 
 void free_board(char **board)
