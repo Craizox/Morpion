@@ -1,3 +1,4 @@
 *.o
 morpion
 tags
+tags.lock
