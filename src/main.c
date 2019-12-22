@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
 
 static int check_line(char **board, char player)
 {
@@ -118,17 +118,30 @@ static int check_full_board(char **board)
     return 1;
 }
 
-static void put_char_in_board(char **board, char player, char *input)
+static int put_char_in_board(char **board, char player, char *input)
 {
-    if (input[0] == 'A')
+    if (input[0] == 'A' || input[0] == 'a')
         board[input[1] - '0'][0] = player;
-    else if (input[0] == 'B')
+    else if (input[0] == 'B' || input[0] == 'c')
         board[input[1] - '0'][1] = player;
     else
         board[input[1] - '0'][2] = player;
+    return 1;
 }
 
-static void ask_for_player(char **board, char player)
+static int check_valid(char *buf)
+{
+    if (strlen(buf) != 2)
+        return 0;
+    if ((buf[0] < 'a' || buf[0] > 'c') && (buf[0] < 'A' || buf[0] > 'C'))
+        return 0;
+    if ((buf[1] < '0' || buf[1] > '2'))
+        return 0;
+    return 1;
+}
+
+
+static int ask_for_player(char **board, char player)
 {
     print_board(board);
     if (player == 'o')
@@ -136,10 +149,16 @@ static void ask_for_player(char **board, char player)
     else
         printf("Turn of player 2: ");
 
-    char buf[3];
-    scanf("%s", buf);
+    char *buf;
+    scanf("%ms", &buf);
 
-    put_char_in_board(board, player, buf);
+    if (!check_valid(buf))
+    {
+        printf("Not a valid case try again\n");
+        return 0;
+    }
+
+    return put_char_in_board(board, player, buf);
 }
 
 
@@ -153,10 +172,15 @@ int main(void)
     while (!(win_p2 = check_win(board, 'x')) && !(win_p1 = check_win(board, 'o')) && !(full = check_full_board(board)))
     {
         if (turn_player % 2 == 0)
-            ask_for_player(board, 'o');
+        {
+            if (ask_for_player(board, 'o'))
+                turn_player++;
+        }
         else
-            ask_for_player(board, 'x');
-        turn_player++;
+        {
+            if (ask_for_player(board, 'x'))
+                turn_player++;
+        }
 
     }
     print_board(board);
