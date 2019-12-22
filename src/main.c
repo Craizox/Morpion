@@ -15,13 +15,13 @@ static int check_valid(char *buf)
     return 1;
 }
 
-static int ask_for_player(char **board, char player)
+static int ask_for_player(char **board, char player, char *name)
 {
     print_board(board);
     if (player == 'o')
-        printf("Turn of player 1: ");
+        printf("Turn of %s: ", name);
     else
-        printf("Turn of player 2: ");
+        printf("Turn of %s: ", name);
 
     char *buf;
     scanf("%ms", &buf);
@@ -35,22 +35,33 @@ static int ask_for_player(char **board, char player)
     return put_char_in_board(board, player, buf);
 }
 
+static void ask_player_name(char **p1, char **p2)
+{
+    printf("Name of player 1: ");
+    scanf("%ms", p1);
+
+    printf("Name of player 2: ");
+    scanf("%ms", p2);
+}
 
 int main(void)
 {
     char **board = board_init();
     int turn_player = 0;
+    char *player1;
+    char *player2;
+    ask_player_name(&player1, &player2);
     int win_p1, full, win_p2;
     while (!(win_p2 = check_win(board, 'x')) && !(win_p1 = check_win(board, 'o')) && !(full = check_full_board(board)))
     {
         if (turn_player % 2 == 0)
         {
-            if (ask_for_player(board, 'o'))
+            if (ask_for_player(board, 'o', player1))
                 turn_player++;
         }
         else
         {
-            if (ask_for_player(board, 'x'))
+            if (ask_for_player(board, 'x', player2))
                 turn_player++;
         }
 
@@ -59,8 +70,9 @@ int main(void)
     if (full)
         printf("Egality\n");
     if (win_p1)
-        printf("Player 1 Won\n");
+        printf("%s Won\n", player1);
     if (win_p2)
-        printf("Player 2 won\n");
+        printf("%s Won\n", player2);
+    free_board(board);
     return 0;
 }
