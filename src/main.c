@@ -74,19 +74,21 @@ static int check_win(char **board, char player)
 
 static void print_board(char **board)
 {
+    printf("    A   B   C\n");
     for (int i = 0; i < 3; i++)
     {
-        printf(" -----------\n");
+        printf("   -----------\n");
         for (int j = 0; j < 3; j++)
         {
             if (j == 0)
-                printf("| %c |", board[i][j]);
+                printf("%d | %c |", i, board[i][j]);
             else
                 printf(" %c |", board[i][j]);
         }
         printf("\n");
     }
-    printf(" -----------\n");
+    printf("   -----------\n");
+    printf("\n");
 }
 
 static char **board_init(void)
@@ -116,23 +118,53 @@ static int check_full_board(char **board)
     return 1;
 }
 
+static void put_char_in_board(char **board, char player, char *input)
+{
+    if (input[0] == 'A')
+        board[input[1] - '0'][0] = player;
+    else if (input[0] == 'B')
+        board[input[1] - '0'][1] = player;
+    else
+        board[input[1] - '0'][2] = player;
+}
+
+static void ask_for_player(char **board, char player)
+{
+    print_board(board);
+    if (player == 'o')
+        printf("Turn of player 1: ");
+    else
+        printf("Turn of player 2: ");
+
+    char buf[3];
+    scanf("%s", buf);
+
+    put_char_in_board(board, player, buf);
+}
+
+
+
+
 int main(void)
 {
     char **board = board_init();
-    print_board(board);
-    int win_p1, full;
-    while ((win_p1 = check_win(board, 'x')) && (full = check_full_board(board)))
+    int turn_player = 0;
+    int win_p1, full, win_p2;
+    while (!(win_p2 = check_win(board, 'x')) && !(win_p1 = check_win(board, 'o')) && !(full = check_full_board(board)))
     {
-        // ask for player where he wants to play
+        if (turn_player % 2 == 0)
+            ask_for_player(board, 'o');
+        else
+            ask_for_player(board, 'x');
+        turn_player++;
+
     }
-    char *b[3] =
-    {
-        "xxo",
-        "xox",
-        "oxo"
-    };
-    print_board(b);
-    printf("%d\n", check_win(b, 'o'));
-    printf("%d\n", check_win(b, 'x'));
-    return 1;
+    print_board(board);
+    if (full)
+        printf("Egality\n");
+    if (win_p1)
+        printf("Player 1 Won\n");
+    if (win_p2)
+        printf("Player 2 won\n");
+    return 0;
 }
