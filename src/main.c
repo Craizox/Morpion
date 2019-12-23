@@ -28,11 +28,14 @@ static int ask_for_player(char **board, char player, char *name)
 
     if (!check_valid(buf))
     {
+        free(buf);
         printf("Not a valid case try again\n");
         return 0;
     }
 
-    return put_char_in_board(board, player, buf);
+    int res = put_char_in_board(board, player, buf);
+    free(buf);
+    return res;
 }
 
 static void ask_player_name(char **p1, char **p2)
@@ -77,6 +80,8 @@ int main(void)
         if (win_p2)
             printf("%s Won\n", player2);
         free_board(board);
+        free(player1);
+        free(player2);
 
         printf("Do you want to play again [Y/n]: ");
         char *p;
@@ -85,6 +90,7 @@ int main(void)
             play = 1;
         else
             play = 0;
+        free(p);
     }
     return 0;
 }
