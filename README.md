@@ -1,10 +1,13 @@
 # Morpion
 
-This is a little game that a made during my time off
+This is a little game that a made, This game is playable in POSIX shell only
+due to the used of the auto allocation for the scanf function
 
 ## Installation
 
-1. Clone the repository
-2. make
-3. Launch the game with ./morpion
-4. Play
+```
+$ git clone git@github.com:Craizox/Morpion.git
+$ cd Morpion
+$ make
+$ ./morpion
+```
