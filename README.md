@@ -9,5 +9,9 @@ due to the used of the auto allocation for the scanf function
 $ git clone git@github.com:Craizox/Morpion.git
 $ cd Morpion
 $ make
-$ ./morpion
+```
+Then just launch the installation script that will just move the executable to
+/usr/bin/. The script will need the root permission to move the script
+```
+$ ./install.sh
 ```
