@@ -11,9 +11,23 @@ void print_board(char **board)
         for (int j = 0; j < 3; j++)
         {
             if (j == 0)
-                printf("%d | %c |", i, board[i][j]);
+            {
+                if (board[i][j] == 'o')
+                    printf("%d | \033[34;01m%c\033[00m |", i, board[i][j]);
+                else if (board[i][j] == 'x')
+                    printf("%d | \033[31;01m%c\033[00m |", i, board[i][j]);
+                else
+                    printf("%d | \033[31;01m%c\033[00m |", i, board[i][j]);
+            }
             else
-                printf(" %c |", board[i][j]);
+            {
+                if (board[i][j] == 'o')
+                    printf(" \033[34;01m%c\033[00m |", board[i][j]);
+                else if (board[i][j] == 'x')
+                    printf(" \033[31;01m%c\033[00m |", board[i][j]);
+                else
+                    printf(" %c |", board[i][j]);
+            }
         }
         printf("\n");
     }
